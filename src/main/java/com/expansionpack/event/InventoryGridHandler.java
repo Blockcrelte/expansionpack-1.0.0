@@ -236,16 +236,11 @@ public class InventoryGridHandler {
         Set<Integer> renderedArea = new HashSet<>();
 
         for (Slot slot : screen.getMenu().slots) {
-            // 1. 如果当前槽位已经被大物品渲染覆盖，彻底跳过
             if (renderedArea.contains(slot.index)) continue;
-
-            // 2. 创造模式或超出范围跳过
+            //创造模式不渲染dwd
             if (isCreative || (slot.container instanceof Inventory && slot.getContainerSlot() >= 36)) continue;
-
             ItemStack stack = slot.getItem();
             int x = screen.getGuiLeft() + slot.x, y = screen.getGuiTop() + slot.y;
-
-            // 3. 处理 Slave 槽位：标记为已渲染并绘制占位遮罩
             if (isSlave(stack)) {
                 renderedArea.add(slot.index);
                 gui.pose().pushPose(); gui.pose().translate(0, 0, 350);
@@ -253,25 +248,23 @@ public class InventoryGridHandler {
                 continue;
             }
 
-            // 4. 处理 Master 槽位
+            //处理特殊槽位
             if (!stack.isEmpty()) {
                 ItemDim dim = getActualDim(stack, slot, false);
                 boolean rotated = stack.hasTag() && stack.getTag().getBoolean(IS_ROTATED);
 
-                // 边界保护：如果物品太宽超过容器边框，回退到 1x1 渲染
+                //如果物品太宽超过容器边框，回退到 1x1 渲染
                 if (slot.getContainerSlot() % 9 + dim.w > 9) dim = new ItemDim(1, 1);
 
                 if (!dim.is1x1()) {
                     int tw = 16 + (dim.w - 1) * 18, th = 16 + (dim.h - 1) * 18;
-
-                    // 【关键修复】将整个大物品覆盖的所有槽位索引加入 renderedArea，防止数字重影
                     for (int dx = 0; dx < dim.w; dx++) {
                         for (int dy = 0; dy < dim.h; dy++) {
                             renderedArea.add(slot.index + dy * 9 + dx);
                         }
                     }
 
-                    // 绘制大背景
+                    // 绘制一大坨背景墙
                     gui.pose().pushPose(); gui.pose().translate(0, 0, 360);
                     gui.fill(x-1, y-1, x+tw+1, y+th+1, 0xFFC6C6C6);
                     gui.fill(x, y, x+tw, y+th, 0xFFB0B0B0);
@@ -280,7 +273,7 @@ public class InventoryGridHandler {
                     gui.fill(x-1, y, x, y+th, b); gui.fill(x+tw, y, x+tw+1, y+th, b);
                     gui.pose().popPose();
 
-                    // 绘制大图标
+                    // 绘制超大图标(不要看我)
                     gui.pose().pushPose();
                     gui.pose().translate(x + tw / 2.0f, y + th / 2.0f, 400);
                     float s = Math.min(tw / 16.0f, th / 16.0f) * 0.85f;
@@ -290,8 +283,7 @@ public class InventoryGridHandler {
                     RenderSystem.enableBlend(); Lighting.setupForFlatItems();
                     gui.renderFakeItem(stack, 0, 0); Lighting.setupFor3DItems();
                     gui.pose().popPose();
-
-                    // 【关键修复】绘制堆叠数量，确保在最上层且位置基于整个大矩形
+                    // ai救救我= =
                     if (stack.getCount() > 1) {
                         String txt = String.valueOf(stack.getCount());
                         gui.pose().pushPose(); gui.pose().translate(0, 0, 700); // 提升层级到 700

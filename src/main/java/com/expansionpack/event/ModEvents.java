@@ -27,7 +27,7 @@ import net.minecraftforge.fml.common.Mod;
 
 import java.util.ArrayList;
 import java.util.List;
-
+        //这个附魔是ai写的小玩意，别看这个了ovo
 @Mod.EventBusSubscriber(modid = ExpansionPack.MOD_ID)
 public class ModEvents {
 

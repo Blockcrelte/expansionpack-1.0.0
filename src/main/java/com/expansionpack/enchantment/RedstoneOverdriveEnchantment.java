@@ -20,7 +20,7 @@ public class RedstoneOverdriveEnchantment extends Enchantment {
 
     @Override
     public int getMaxLevel() {
-        return 5; // 假设最高5级，容量可达 625
+        return 5;
     }
 
     @Override
