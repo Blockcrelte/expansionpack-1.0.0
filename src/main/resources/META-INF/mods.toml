@@ -1,0 +1,46 @@
+# 指定 Mod 加载器
+modLoader="javafml"
+
+# Forge 1.20.1 需要的加载器版本通常是 47 以上
+loaderVersion="[47,)"
+
+# 许可证
+license="All rights reserved"
+
+# 模组主信息部分
+[[mods]]
+    # 【重要】这里必须和你 Java 代码里的 MOD_ID 完全一致 (全小写)
+    modId="expansionpack"
+    
+    # 模组版本
+    version="1.0.0"
+    
+    # 游戏内显示的名称
+    displayName="ExpansionPack"
+    
+    # 作者
+    authors="Zhuchu"
+    
+    # 模组描述（支持多行）
+    description='''
+    整合包附带内容
+    '''
+
+# 依赖项配置：Forge
+# 【重要】[[dependencies.你的modid]]
+[[dependencies.expansionpack]]
+    modId="forge"
+    mandatory=true
+    # Forge 版本范围
+    versionRange="[47,)"
+    ordering="NONE"
+    side="BOTH"
+
+# 依赖项配置：Minecraft
+[[dependencies.expansionpack]]
+    modId="minecraft"
+    mandatory=true
+    # 仅支持 1.20.1
+    versionRange="[1.20.1,1.20.2)"
+    ordering="NONE"
+    side="BOTH"
